@@ -118,4 +118,10 @@ docker run -d --network conexao-brdige --name alurabooks -p 3000:3000 aluradocke
 # Consultar o arquivo docker-compose.yml para verificar o uso do .yml
 # A partir da pasta onde está o arquivo .yml, executar: "docker-compose up"
 
+# Verificar docker composes executados
+docker-compose ps -a
+
+# Remover containers, redes criadas, etc
+docker-compose down
+
 

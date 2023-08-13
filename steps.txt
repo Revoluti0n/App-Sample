@@ -1,0 +1,32 @@
+# Buildando container:
+docker build -t kelvynxavier/app-node:1.0.1 .
+
+# Baixando uma imagem mas não executando ela (para executar posteriormente):
+docker pull <image> (exemplo: docker pull node)
+
+# Startando container no modo interativo:
+docker run -it <image> bash (exemplo: docker run -it ubuntu bash)
+
+# Startando container com definição de porta (-p 8080:3000) e sem travar o terminal (-d):
+docker run -p 8080:3000 -d kelvynxavier/app-node:1.0.1
+
+# Mostrando imagens baixadas no sistema:
+docker images ou docker images ls
+
+# Analisar mais detalhadamente uma imagem:
+docker inspect <image_id>
+
+# Analisar o histórico (as camadas) de uma imagem:
+docker history <image_id>
+
+# Pausando container específico:
+docker pause <container_id>
+
+# Despausando container:
+docker unpause <container_id>
+
+# Parando container específico:
+docker stop <container_id>
+
+# Parando todos os containers:
+docker stop $(docker container ls -q)

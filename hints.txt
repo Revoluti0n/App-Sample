@@ -1,0 +1,96 @@
+# Buildando container:
+docker build -t <container_id> .
+# Exemplo: "docker build -t kelvynxavier/app-node:1.0.1 ."
+
+# Baixando uma imagem mas não executando ela (para executar posteriormente):
+docker pull <image>
+# Exemplo: "docker pull node"
+
+# Startando container no modo interativo:
+docker run -it <image> bash
+# Exemplo: "docker run -it ubuntu bash"
+# OBS: flag "-v" serve para persistir dados criados no container em um volume local
+# Exemplo de uso da flag "-v": "docker run -it -v /home/xavier/volume-docker:/app ubuntu bash"
+# Desta forma, tudo que for criado em /app no container será persistido em /home/xavier/volume-docker
+# Usando na prática:
+# Após executar o comando "docker run -it -v /home/xavier/volume-docker:/app ubuntu bash":
+# Acessa a pasta app: cd app/
+# Lista os arquivos presentes: ls
+# Cria um arquivo nesta pasta: touch arquivo-teste.txt
+# Desta forma o arquivo "arquivo-teste.txt" criado no container será persistido
+# De uma forma mais semântica:
+# "docker run -it --mount type=bind,source=/home/xavier/volume-docker,target=/app ubuntu bash"
+
+# Verificando volumes:
+docker volume ls
+
+# Criar um volume:
+docker volume create <volume_name>
+# Exemplo em conjunto com docker run:
+# "docker volume create meu-volume"
+# "docker run -it -v meu-volume:/app ubuntu bash" ou
+# "docker run -it --mount type=bind,source=meu-volume,target=/app ubuntu bash"
+# Para acessar o volume local:
+# cd /var/lib/docker/volumes/<nome-do-volume>/_data
+# OBS: utilizando "docker run -it --mount source=meu-novo-volume,target=/app ubuntu bash" starta o container criando
+# um novo volume automaticamente
+
+# Persistir dados no host e não na camada de R/W:
+docker run -it --tmpfs=/app ubuntu bash
+# OBS: Apenas para ambiente Linux!
+
+# RESUMO:
+# volumes = gerenciado pelo Docker
+# bind-mount = ligação entre host e container
+# tmpfs = ligação entre host e container, não persistindo dados na camada R/W (apenas para Linux)
+
+# Startando container com definição de porta (-p 8080:3000) e sem travar o terminal (-d):
+docker run -p <port>:<container_port> -d <container_id>
+# Exemplo: "docker run -p 8080:3000 -d kelvynxavier/app-node:1.0.1"
+
+# Mostrando imagens baixadas no sistema:
+docker images ou docker images ls
+
+# Analisar mais detalhadamente uma imagem:
+docker inspect <image_id>
+
+# Analisar o histórico (as camadas) de uma imagem:
+docker history <image_id>
+
+# Removendo todas as imagens:
+docker images rmi $(docker image ls -aq)
+# OBS1: flag "--force" para forçar
+
+# Removendo todos os containers (inclusive os parados):
+docker container rm $(docker container ls -aq)
+
+# Pausando container específico:
+docker pause <container_id>
+
+# Despausando container:
+docker unpause <container_id>
+
+# Parando container específico:
+docker stop <container_id>
+
+# Parando todos os containers:
+docker stop $(docker container ls -q)
+
+# Verificando containers em execução:
+docker ps
+# OBS1: flag "-s" serve para verificar o tamanho do arquivo (camada R/W e camada(s) R/O)
+# OBS2: flag "-sa" mostra todos os containers, inclusive os que não estão em execução
+# OBS3: tamanho virtual = camada(s) R/O + camada R/W
+
+
+# Login no DockerHub:
+docker login -u <user>
+
+# Criando tag para enviar imagem ao DockerHub:
+docker tag <image_id> <tag_name>
+# Exemplo: "docker tag kelvynxavier/app-node:1.0.2 blablabla/app-node:1.0.2"
+
+# Enviando docker images ao DockerHub:
+docker push <image_id>
+# Exemplo: "docker push kelvynxavier/app-node:1.0.2" ou
+# "docker push blablabla/app-node:1.0.2" para enviar com a tag criada

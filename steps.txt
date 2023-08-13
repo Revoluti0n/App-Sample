@@ -30,3 +30,12 @@ docker stop <container_id>
 
 # Parando todos os containers:
 docker stop $(docker container ls -q)
+
+# Login no DockerHub:
+docker login -u <user>
+
+# Criando tag para enviar imagem ao DockerHub:
+docker tag <image_id> <tag_name> (exemplo: docker tag kelvynxavier/app-node:1.0.2 blablabla/app-node:1.0.2)
+
+# Enviando docker images ao DockerHub:
+docker push <image_id> (exemplo: docker push kelvynxavier/app-node:1.0.2 ou docker push blablabla/app-node:1.0.2 para enviar com a tag criada)

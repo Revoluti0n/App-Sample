@@ -4,10 +4,10 @@ docker build -t <container_id> .
 
 # Baixando uma imagem mas não executando ela (para executar posteriormente):
 docker pull <image>
-# Exemplo: "docker pull node"
+# Exemplo: "docker pull mongo:4:4:6"
 
 # Startando container no modo interativo:
-docker run -it <image> bash
+docker run -it <image> <command>
 # Exemplo: "docker run -it ubuntu bash"
 # OBS: flag "-v" serve para persistir dados criados no container em um volume local
 # Exemplo de uso da flag "-v": "docker run -it -v /home/xavier/volume-docker:/app ubuntu bash"
@@ -61,8 +61,9 @@ docker history <image_id>
 docker images rmi $(docker image ls -aq)
 # OBS1: flag "--force" para forçar
 
-# Removendo todos os containers (inclusive os parados):
+# Removendo todos os containers (que não estão em execução):
 docker container rm $(docker container ls -aq)
+# OBS: flag "--force" remove até os que estão em execução "docker container rm $(docker container ls -aq) --force"
 
 # Pausando container específico:
 docker pause <container_id>
@@ -94,3 +95,27 @@ docker tag <image_id> <tag_name>
 docker push <image_id>
 # Exemplo: "docker push kelvynxavier/app-node:1.0.2" ou
 # "docker push blablabla/app-node:1.0.2" para enviar com a tag criada
+
+# Listando redes do Docker:
+docker network ls
+
+# Criando redes entre containers:
+docker network create --driver bridge <nome-da-rede>
+# Exemplo: "docker network create --driver bridge minha-bridge"
+# Então, num contexto, seria: "docker run -it --name meu-container --network minha-bridge ubuntu bash"
+# OBS: A rede host remove o isolamento entre o container e o sistema, enquanto a rede none remove a interface de rede.
+
+# Exemplo de conexão bridge entre containers:
+docker network create conexao-bridge
+docker run -d --network conexao-bridge --name meu-mongo mongo:4.4.6
+docker run -d --network conexao-brdige --name alurabooks -p 3000:3000 aluradocker/alura-books:1.0
+# localhost:3000/seed para popular o banco de dados
+# localhost:3000 para acessar os front com os dados populados
+
+# Docker Compose
+# O Docker Compose irá resolver o problema de executar múltiplos containers de uma só vez e de maneira coordenada,
+# evitando executar cada comando de execução individualmente.
+# Consultar o arquivo docker-compose.yml para verificar o uso do .yml
+# A partir da pasta onde está o arquivo .yml, executar: "docker-compose up"
+
+
